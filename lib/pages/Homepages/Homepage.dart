@@ -63,7 +63,8 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     if (isLoading) {
       return const Scaffold(
-        body: Center(child: CircularProgressIndicator()),
+        body: Center(child: CircularProgressIndicator(),
+        ),
       );
     }
 
