@@ -1,3 +1,3 @@
 # Aplikasi Kos
 
-A new Flutter project.
+Sebuah aplikasi
