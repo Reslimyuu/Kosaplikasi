@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "840803479272",
+    "project_id": "aplikasi-kos-489fa",
+    "storage_bucket": "aplikasi-kos-489fa.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:840803479272:android:335d2c61eb837911c3e35d",
+        "android_client_info": {
+          "package_name": "com.example.flutter_application_1"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC9p9zsooXHZseYuIrYKHU1IPNGsAJrrHY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
