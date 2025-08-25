@@ -1,3 +1,3 @@
-# flutter_application_1
+# Aplikasi Kos
 
 A new Flutter project.
