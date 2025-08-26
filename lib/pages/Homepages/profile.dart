@@ -36,9 +36,6 @@ class _CompleteProfileState extends State<completeprofile> {
       'ktmUrl': ktmUrl, // sementara kita isi dummy
     });
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text("Data berhasil disimpan")),
-    );
 
     Navigator.pushReplacement(
       context,

@@ -40,52 +40,50 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
   }
 }
 
-  /// Fungsi untuk mengirim pesan
   Future<void> _sendMessage(String text) async {
-    if (text.trim().isNotEmpty) {
-      final timestamp = FieldValue.serverTimestamp();
+  if (text.trim().isEmpty) return;
 
-      // Menyimpan pesan ke koleksi Chats
-      await FirebaseFirestore.instance
-          .collection('Chats')
-          .doc(widget.currentUserId)
-          .collection(widget.receiverId)
-          .add({
-        'senderId': widget.currentUserId,
-        'receiverId': widget.receiverId,
-        'text': text.trim(),
-        'timestamp': FieldValue.serverTimestamp(),
-        'isRead' : false,
-      });
-      _messageController.clear();
+  final timestamp = FieldValue.serverTimestamp();
+
+  final messageData = {
+    'senderId': widget.currentUserId,
+    'receiverId': widget.receiverId,
+    'text': text.trim(),
+    'timestamp': timestamp,
+    'isRead': false, // default false untuk penerima
+  };
+
+  _messageController.clear();
 
 
+  // Simpan di sisi pengirim
+  await FirebaseFirestore.instance
+      .collection('Chats')
+      .doc(widget.currentUserId)
+      .collection(widget.receiverId)
+      .add(messageData);
 
-      // Memperbarui LastMessage untuk pengirim
-      await FirebaseFirestore.instance
+  // Simpan di sisi penerima
+  await FirebaseFirestore.instance
+      .collection('Chats')
+      .doc(widget.receiverId)
+      .collection(widget.currentUserId)
+      .add(messageData);
+
+  // Update lastMessageTime
+  await FirebaseFirestore.instance
       .collection('Users')
       .doc(widget.currentUserId)
-      .update(
-        {
-          'lastMessageTime': timestamp
-        }
-      );
+      .update({'lastMessageTime': timestamp});
 
-      // Memperbarui LastMessage untuk penerima
-      await FirebaseFirestore.instance
+  await FirebaseFirestore.instance
       .collection('Users')
       .doc(widget.receiverId)
-      .update({
-        'lastMessageTime' : timestamp
-      });
+      .update({'lastMessageTime': timestamp});
+}
 
-      Future.delayed( Duration(milliseconds: 100), () {
-        if (_scrollController.hasClients) {
-          _scrollController.jumpTo(0.0);
-        }
-      });
-    }
-  }
+
+
 
   @override
   void initState() {
@@ -146,9 +144,6 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                   .orderBy('timestamp', descending: false)
                   .snapshots(),
               builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
-                }
                 if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
                   return const Center(
                     child: Text(
@@ -160,9 +155,13 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
 
                 final messages = snapshot.data!.docs;
 
-                Future.delayed( Duration(milliseconds: 100), () {
+                WidgetsBinding.instance.addPostFrameCallback((_) {
                   if (_scrollController.hasClients) {
-                    _scrollController.jumpTo(0.0);
+                    _scrollController.animateTo(
+                      _scrollController.position.maxScrollExtent, 
+                      duration: Duration(milliseconds: 200), 
+                      curve: Curves.easeOut,
+                      );
                   }
                 });
 
@@ -293,29 +292,48 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
             ),
           ),
           // TextField untuk mengirim pesan
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    controller: _messageController,
-                    decoration: InputDecoration(
-                      hintText: "Ketik disini",
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
+          SafeArea(
+            child: Padding(
+              padding: EdgeInsets.all(12.0),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      controller: _messageController,
+                      decoration: InputDecoration(
+                        hintText: "Ketik disini",
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Colors.white,
+                            width: 4.0,
+                          ),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Colors.white,
+                            width: 4.0,
+                          ),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Colors.white,
+                          ),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
                       ),
                     ),
                   ),
-                ),
-                const SizedBox(width: 8),
-                IconButton(
-                  icon: const Icon(Icons.send, color: Color(0xff3582A9)),
-                  onPressed: () {
-                    _sendMessage(_messageController.text);
-                  },
-                ),
-              ],
+                  const SizedBox(width: 8),
+                  IconButton(
+                    icon: const Icon(Icons.send, color: Color(0xff3582A9)),
+                    onPressed: () {
+                      _sendMessage(_messageController.text);
+                    },
+                  ),
+                ],
+              ),
             ),
           ),
         ],

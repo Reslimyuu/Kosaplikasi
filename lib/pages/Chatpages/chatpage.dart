@@ -264,7 +264,7 @@ class _ChatPageState extends State<ChatPage> {
                                         ),
                                         child: Text(
                                           "$unreadCount",
-                                          style: const TextStyle(color: Colors.blueAccent, fontSize: 12),
+                                          style: const TextStyle(color: Colors.white, fontSize: 12),
                                         ),
                                       );
                                     },

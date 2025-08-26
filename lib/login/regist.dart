@@ -42,9 +42,14 @@ class _RegistState extends State<Regist> {
         password: passwordcontroller.text.trim(),
       );
 
-      FirebaseFirestore.instance.collection('Users').doc(userCredential.user!.uid).set({
+
+
+      await FirebaseFirestore.instance.collection('Users').doc(userCredential.user!.uid).set({
+        'uid': userCredential.user!.uid,
         'email': emailcontroller.text.trim(),
+        'name' : '',
         'createdAt': FieldValue.serverTimestamp(),
+        'isRead' : true,
       });
 
       Navigator.pushReplacement(
