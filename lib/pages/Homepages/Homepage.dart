@@ -20,7 +20,11 @@ class _HomePageState extends State<HomePage> {
   bool isLoading = true;
   int _selectedIndex = 0;
 
+  // Isi dari index bottomnavbar
+
   List<Widget> _pages = [];
+
+  // Fungsi ketika BottomNavbar Di tekan
 
   void _onItemTapped(int index) {
     setState(() {
@@ -28,18 +32,23 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  // Panggil Fungsi loadusername untuk mengambil nama user 
+
   @override
   void initState() {
     super.initState();
     _loadUserName();
   }
 
+  // Fungsi untuk mengambil nama user
+
   Future<void> _loadUserName() async {
     try {
       DocumentSnapshot userDoc = await FirebaseFirestore.instance
-          .collection('Users')
+          .collection('Users') // Dari Collection Users
           .doc(widget.uid)
           .get();
+
 
       setState(() {
         userName = userDoc.exists ? (userDoc['name'] ?? 'Pengguna') : 'Pengguna';
@@ -63,12 +72,16 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     if (isLoading) {
       return const Scaffold(
-        body: Center(child: CircularProgressIndicator(),
+        // Tampilkan Loading sesudah login
+        body: Center(child: CircularProgressIndicator(), 
         ),
       );
     }
 
+    // If untuk menampilkan bottomnavbar pada index 0 dan index 3, dan selain index tersebut false
     bool showBottomNavBar = _selectedIndex == 0 || _selectedIndex == 3;
+
+    // Bottomnavbar
 
     return Scaffold(
       backgroundColor: const Color(0xfff6f6f6),
@@ -104,6 +117,8 @@ class _HomePageState extends State<HomePage> {
                 final receiverId = firstUser["uid"];
                 final receiverName = firstUser["name"];
 
+                // Untuk floating button dibagian tengah bottom navbar 
+
                 return SizedBox(
                   height: 78,
                   width: 78,
@@ -117,6 +132,8 @@ class _HomePageState extends State<HomePage> {
                     ),
                     backgroundColor: Colors.white,
                     onPressed: () {
+
+                      // Menuju ke chatpage 
                       Navigator.push(
                         context,
                         MaterialPageRoute(

@@ -229,7 +229,7 @@ class _ChatPageState extends State<ChatPage> {
                                         }
                                         final lastMessage = snapshot.data!.docs.first.data() as Map<String, dynamic>;
                                         return Text(
-                                          lastMessage['text'] ?? "No Last Message",
+                                          lastMessage['text'] ?? "Tidak ada pesan terakhir",
                                           style: GoogleFonts.poppins(
                                             fontSize: 12,
                                             fontWeight: FontWeight.w500,

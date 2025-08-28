@@ -13,6 +13,9 @@ class HomeMainPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
+
+      // Isi dari Homepage
+
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
         child: SingleChildScrollView(

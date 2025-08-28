@@ -39,8 +39,8 @@ class _LoginState extends State<Login> {
       showDialog(
         context: context, 
         builder: (context) => AlertDialog(
-          title: Text("Login Failed"),
-          content: Text("Please check your email and password."),
+          title: Text("Login Gagal"),
+          content: Text("Silakan periksa email dan kata sandi Anda."),
           actions: [
             TextButton(
               onPressed: () {

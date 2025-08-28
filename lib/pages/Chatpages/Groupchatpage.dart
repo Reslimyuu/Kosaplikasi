@@ -28,7 +28,7 @@ class _GroupChatPageState extends State<GroupChatPage> {
           .collection('Messages')
           .add({
         'senderId': FirebaseAuth.instance.currentUser!.uid,
-        'senderName': FirebaseAuth.instance.currentUser!.displayName ?? "Anonim",
+        'senderName': FirebaseAuth.instance.currentUser!.displayName ?? "User",
         'text': text.trim(),
         'timestamp': FieldValue.serverTimestamp(),
       });
